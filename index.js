@@ -32,7 +32,7 @@ const corsOptions = {
     'http://localhost:8082', // Current frontend port
     'http://localhost:3000', // Alternative dev port
     'http://localhost:4173', // Vite preview
-    'https://your-vercel-app.vercel.app', // Vercel production URL (replace with your actual URL)
+    'https://cms-frontend-mauve.vercel.app', // Vercel production URL (replace with your actual URL)
     'https://localhost:3000', // SSL dev
     /^https:\/\/.*\.vercel\.app$/, // Allow all Vercel subdomains
   ],
