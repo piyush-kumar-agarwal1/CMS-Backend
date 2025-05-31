@@ -63,20 +63,20 @@ const registerUser = expressAsyncHandler(async (req, res) => {
 
 const googleAuth = expressAsyncHandler(async (req, res) => {
   const { accessToken } = req.body;
-  
+
   try {
-    
+
     const { data } = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
-    
+
     const { email, name, picture, sub: googleId } = data;
-    
-    
+
+
     let user = await User.findOne({ email });
-    
+
     if (!user) {
-      
+
       user = await User.create({
         name,
         email,
@@ -84,12 +84,12 @@ const googleAuth = expressAsyncHandler(async (req, res) => {
         picture,
       });
     } else {
-     
+
       user.googleId = googleId;
       user.picture = picture;
       await user.save();
     }
-    
+
     res.json({
       _id: user._id,
       name: user.name,
@@ -128,7 +128,7 @@ const updateUserProfile = expressAsyncHandler(async (req, res) => {
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
-    
+
     if (req.body.password) {
       user.password = req.body.password;
     }
@@ -149,10 +149,10 @@ const updateUserProfile = expressAsyncHandler(async (req, res) => {
   }
 });
 
-export { 
-  authUser, 
-  registerUser, 
-  getUserProfile, 
+export {
+  authUser,
+  registerUser,
+  getUserProfile,
   updateUserProfile,
-  googleAuth 
+  googleAuth
 };
