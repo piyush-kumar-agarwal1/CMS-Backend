@@ -6,7 +6,7 @@ import Segment from '../models/segmentModel.js';
 
 const router = express.Router();
 
-// General analytics endpoint
+// General analytic endpoint
 router.get('/', protect, async (req, res) => {
     try {
         const { timeRange = '30' } = req.query;
