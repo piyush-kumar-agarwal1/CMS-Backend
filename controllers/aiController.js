@@ -114,7 +114,7 @@ const chatWithAI = expressAsyncHandler(async (req, res) => {
 
 User Query: ${query}
 
-Provide helpful, actionable advice in a conversational tone. Focus on practical CRM solutions, customer segmentation strategies, campaign optimization, and data-driven insights.`;
+Provide concise, actionable advice in a conversational tone. Focus on practical CRM solutions. Use proper formatting with bullet points and paragraphs. Do not use markdown syntax like ** for formatting. Keep responses under 4 paragraphs when possible.`;
 
     const response = await axios.post(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
@@ -132,7 +132,19 @@ Provide helpful, actionable advice in a conversational tone. Focus on practical 
       }
     );
 
-    const aiResponse = response.data.candidates[0].content.parts[0].text;
+    // Get the raw response
+    let aiResponse = response.data.candidates[0].content.parts[0].text;
+
+    // Clean up formatting issues
+    aiResponse = aiResponse
+      // Remove markdown-style formatting
+      .replace(/\*\*(.*?)\*\*/g, '$1')
+      .replace(/\*(.*?)\*/g, '$1')
+      // Replace bullet markers for consistency
+      .replace(/^\s*\*\s+/gm, '• ')
+      // Ensure proper spacing after periods
+      .replace(/\.(?=[A-Z])/g, '. ');
+
     res.json({ response: aiResponse });
 
   } catch (error) {
@@ -141,10 +153,10 @@ Provide helpful, actionable advice in a conversational tone. Focus on practical 
     // Fallback response if Gemini API fails
     const fallbackResponse = `I'm here to help with your CRM needs! Here are some ways I can assist:
 
-• **Customer Segmentation**: Create targeted groups based on behavior, demographics, or purchase history
-• **Campaign Optimization**: Improve open rates, click-through rates, and conversions  
-• **Message Personalization**: Craft compelling content for different customer segments
-• **Analytics Insights**: Understand your customer data and campaign performance
+• Customer Segmentation: Create targeted groups based on behavior, demographics, or purchase history
+• Campaign Optimization: Improve open rates, click-through rates, and conversions  
+• Message Personalization: Craft compelling content for different customer segments
+• Analytics Insights: Understand your customer data and campaign performance
 
 What specific aspect of your CRM strategy would you like help with?`;
 
