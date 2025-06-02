@@ -32,7 +32,7 @@ router.get('/', protect, async (req, res) => {
                 opened: c.metrics?.opened || Math.floor(Math.random() * 400) + 100,
                 clicked: c.metrics?.clicked || Math.floor(Math.random() * 150) + 50,
             })),
-            customerGrowth: getCustomerGrowthData(customers),
+            customerGrowth: await getCustomerGrowthData(req.user._id),
             segmentDistribution: segments.map((seg, index) => ({
                 name: seg.name,
                 value: seg.conditions?.estimatedCount || Math.floor(Math.random() * 200) + 50,
