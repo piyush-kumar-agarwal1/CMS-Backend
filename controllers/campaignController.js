@@ -185,8 +185,9 @@ const sendCampaign = expressAsyncHandler(async (req, res) => {
   }
 
   campaign.metrics.sent = sentCount;
-  campaign.metrics.delivered = sentCount;
+  campaign.metrics.delivered = sentCount; // This should be actual delivered count
   campaign.metrics.failed = failedCount;
+  // Add opened and clicked tracking when those events occur
   campaign.status = 'sent';
   await campaign.save();
 
